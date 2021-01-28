@@ -14,7 +14,6 @@ import java.util.List;
 public class querys {
     final static String SELECTALLCORREDORES = "SELECt * FROM corredor";
     final static String CREATEENTERPRISE = "INSERT INTO empresa (nombre, acciones_disponibles) VALUES (?,?)";
-
     final static String SELECTALLCLIENTS = "SELECT * FROM cliente";
     final static String SELECTALLENTRERPRISE = "SELECt * FROM empresa";
     final static String INSERTCOMPRA = "INSERT INTO cliente_empresa (codigo_cliente, codigo_empresa, numero_acciones) VALUES (?,?,?)";
@@ -23,7 +22,8 @@ public class querys {
     final static String COMPRUEBA = "SELECT acciones_disponibles FROM empresa WHERE codigo=?";
     final static String RESTA = "UPDATE empresa SET acciones_disponibles=? WHERE codigo=?";
     final static String DELETEENTERPRISE = "DELETE FROM empresa WHERE nombre=?";
-    final static String GETENTERPRISE = "SELECT * FROM empresa WHERE nombre=?";
+    final static String GETENTERPRISE = "SELECT * FROM empresa WHERE codigo=?";
+    final static String GETENTERPRISEBYNAME = "SELECT * FROM empresa WHERE nombre=?";
     final static String SELECTACTIONS = "select * from cliente INNER JOIN cliente_empresa ON cliente_empresa.codigo_cliente = cliente.codigo INNER JOIN empresa ON cliente_empresa.codigo_empresa = empresa.codigo";
     private int acciones_disponibles;
     private boolean flag = false;
@@ -117,6 +117,13 @@ public class querys {
                     flag = false;
                     notifyAll();
                 }
+            } else if (getEnterprise(id_empresa) == null) {
+                System.out.println("La empresa elegida no existe, pruebe con otra empresa de la siguiente lista");
+                System.out.println("---Lista de Empresas---");
+                List<enterprise> enterprises = selectAllEnterprise();
+                for (enterprise e : enterprises) {
+                    System.out.println(e);
+                }
             } else {
                 flag = false;
                 notifyAll();
@@ -166,15 +173,32 @@ public class querys {
 
     }
 
-    public enterprise getEnterprise(String name) {
+    public enterprise getEnterprise(int id) {
         enterprise enterprise = null;
         try {
             java.sql.Connection conn = connectionUtils.getConnection();
             PreparedStatement ps = conn.prepareStatement(GETENTERPRISE);
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            while (rs != null && rs.next()) {
+                enterprise = new enterprise(rs.getString("nombre"), rs.getInt("acciones_disponibles"));
+            }
+
+        } catch (SQLException e) {
+
+        }
+        return enterprise;
+    }
+
+    public enterprise getEnterpriseByName(String name) {
+        enterprise enterprise = null;
+        try {
+            java.sql.Connection conn = connectionUtils.getConnection();
+            PreparedStatement ps = conn.prepareStatement(GETENTERPRISEBYNAME);
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
-            if (rs != null) {
-                enterprise = new enterprise(rs.getString("nombre"), rs.getInt("acciones_disponibles"));
+            while (rs != null && rs.next()) {
+                enterprise = new enterprise(rs.getInt("codigo"), rs.getString("nombre"), rs.getInt("acciones_disponibles"));
             }
 
         } catch (SQLException e) {

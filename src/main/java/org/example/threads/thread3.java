@@ -35,7 +35,6 @@ public class thread3 extends Thread {
 
     @Override
     public void run() {
-        System.out.println("LA OPCION AMBARAJAMDA ES" + option);
         if (option == 1) {
             this.query.login(corredor.getLogin(), corredor.getPass());
             this.query.createEnterprise(new enterprise("Restaurante Paco Mer", 5000));

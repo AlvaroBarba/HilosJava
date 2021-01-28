@@ -6,6 +6,7 @@ import org.example.model.enterprise;
 import org.example.querys.querys;
 import org.example.threads.thread1_2;
 import org.example.threads.thread3;
+import org.example.threads.thread4;
 import org.example.utils.utilities;
 
 import java.util.List;
@@ -139,7 +140,7 @@ public class menu {
                     clientes = querys.selectAllClient();
                     cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
                     enterprises = querys.selectAllEnterprise();
-                    enterprise = enterprises.get((int) (Math.random() * (clientes.size() - 1)));
+                    enterprise = enterprises.get((int) (Math.random() * (enterprises.size() - 1)));
                     cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
                     List<corredor> corredores = querys.selectAllCorredores();
                     thread3 thread3_1 = new thread3(corredores.get(0), 1);
@@ -161,6 +162,23 @@ public class menu {
                     thread3_3.start();
                     break;
                 case 4:
+                    clientes = querys.selectAllClient();
+                    cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
+                    enterprise = querys.getEnterpriseByName("Clave");
+                    cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
+                    corredores = querys.selectAllCorredores();
+                    thread4 thread4_1 = new thread4(corredores.get(0), cliente, enterprise, 1);
+                    thread4 thread4_2 = new thread4(corredores.get(corredores.size() - 2), cliente, enterprise, 2);
+                    thread4 thread4_3 = new thread4(corredores.get(corredores.size() - 1), cliente, enterprise, 3);
+
+                    thread4_1.start();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    thread4_2.start();
+                    thread4_3.start();
                     break;
                 case 5:
                     System.out.println("Mostrando Resumen...");

@@ -20,6 +20,11 @@ public class enterprise {
         this.n_actions = n_actions;
     }
 
+    public enterprise(String name, int n_actions) {
+        this.name = name;
+        this.n_actions = n_actions;
+    }
+
     public String getName() {
         return name;
     }

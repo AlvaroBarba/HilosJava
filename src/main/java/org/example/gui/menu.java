@@ -4,28 +4,43 @@ import org.example.model.client;
 import org.example.model.corredor;
 import org.example.model.enterprise;
 import org.example.querys.querys;
-import org.example.threads.*;
+import org.example.threads.thread1_2;
+import org.example.threads.thread3;
 import org.example.utils.utilities;
+
 import java.util.List;
 
 public class menu {
 
-    public static void info(){
+    public static void info() {
+        querys querys = new querys();
         querys.borrarCompras();
         System.out.println("Mostrando los clientes...");
         List<client> clients = querys.selectAllClient();
-        for(client c : clients){
+        for (client c : clients) {
             System.out.println(c);
         }
         System.out.println("Mostrando las empresas...");
         List<enterprise> enterprises = querys.selectAllEnterprise();
-        for (enterprise e : enterprises){
+        for (enterprise e : enterprises) {
             System.out.println(e);
         }
-        mainMenu();
+        mainMenu(enterprises);
     }
 
-    public static void mainMenu() {
+    public static void mainMenu(List<enterprise> enterprises) {
+        querys querys = new querys();
+        corredor corredor;
+        corredor corredor2;
+        enterprise enterprise;
+        enterprise enterprise2;
+        client cliente;
+        client cliente2;
+        List<client> clientes;
+        int n_actions;
+        int n_action2;
+        thread1_2 thread1;
+        thread1_2 thread1_2;
         int option = 0;
         do {
             System.out.println("Bienvenido a la bolsa");
@@ -44,109 +59,121 @@ public class menu {
             System.out.println("6.- Salir");
             option = utilities.getInt();
 
-            switch (option){
+            switch (option) {
                 case 1:
-                    System.out.println("Entrando con el usuario miguel...");
-                    if(querys.login("migue@example.com", "1234") != null){
-                        System.out.println("Usuario ha entrado con exito");
-
-                        List<enterprise> empresas = querys.selectAllEnterprise();
-                        enterprise empresa = empresas.get((int) (Math.random() * empresas.size()));
-                        System.out.println("Vamos a comprar a la empresa: " + empresa);
-
-                        List<client> clientes = querys.selectAllClient();
-                        client cliente = clientes.get((int) (Math.random()* (clientes.size()-1)));
-                        System.out.println("Comprando con el cliente: " + cliente.getName());
-
-
-                        int n_acciones = (int) (Math.random() * 50);
-                        if(n_acciones == 0){
-                            n_acciones = 1;
-                        }
-                        System.out.println("Se va a realizar la compra de " + n_acciones + " acciones");
-
-                        corredor corredor = new corredor();
-
-                        thread1 thread1 = new thread1(corredor, cliente, empresa, n_acciones, option);
-
-                        empresas = querys.selectAllEnterprise();
-                        empresa = empresas.get((int) (Math.random() * empresas.size()));
-                        System.out.println("Vamos a comprar a la empresa: " + empresa);
-
-                        cliente = clientes.get((int) (Math.random()* (clientes.size()-1)));
-                        System.out.println("Comprando con el cliente: " + cliente.getName());
-
-                        n_acciones = (int) (Math.random() * 50);
-                        if(n_acciones == 0){
-                            n_acciones = 1;
-                        }
-                        System.out.println("Se va a realizar la compra de " + n_acciones + " acciones");
-
-                        thread1 thread1_2 = new thread1(corredor, cliente, empresa, n_acciones,option);
-
-                        thread1.start();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        thread1_2.start();
-                    }else{
-                        System.out.println("Ha ocurrido un error");
+                    //corredor 1, cliente 1, empresa 1 y numero de acciones
+                    corredor = new corredor("migue@example.com", "1234");
+                    enterprise = enterprises.get((int) (Math.random() * enterprises.size()));
+                    clientes = querys.selectAllClient();
+                    cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
+                    int n_acciones = (int) (Math.random() * 50);
+                    if (n_acciones == 0) {
+                        n_acciones = 1;
                     }
+                    System.out.println("Se van a comprar " + n_acciones + " acciones en la empresa " + enterprise.getName() + " con el cliente " + cliente.getName());
+
+                    //corredor 2, cliente 2, empresa 2 y numero de acciones
+                    corredor2 = new corredor("alvaro@example.com", "1234");
+                    enterprise2 = enterprises.get((int) (Math.random() * enterprises.size()));
+                    cliente2 = clientes.get((int) (Math.random() * (clientes.size() - 1)));
+                    int n_acciones2 = (int) (Math.random() * 50);
+                    if (n_acciones2 == 0) {
+                        n_acciones2 = 1;
+                    }
+                    System.out.println("Se van a comprar " + n_acciones2 + " acciones en la empresa " + enterprise2.getName() + " con el cliente " + cliente2.getName());
+
+                    System.out.println("A la espera de que los corredores se logueen...");
+
+                    //Creacion de hilos
+                    thread1 = new thread1_2(corredor, cliente, enterprise, n_acciones, option);
+                    thread1_2 = new thread1_2(corredor2, cliente2, enterprise2, n_acciones2, option);
+
+                    //Ejecucion hilos
+                    thread1.start();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    thread1_2.start();
                     break;
                 case 2:
-                    System.out.println("Entrando con el usuario miguel...");
-                    if(querys.login("migue@example.com", "1234") != null){
-                        System.out.println("Usuario ha entrado con exito");
-
-                        List<enterprise> empresas = querys.selectAllEnterprise();
-                        enterprise empresa = empresas.get(empresas.size() - 1);
-                        System.out.println("Los dos clientes van a comprar a la empresa: " + empresa);
-
-                        List<client> clientes = querys.selectAllClient();
-                        client cliente = clientes.get((int) (Math.random()* (clientes.size()-1)));
-                        System.out.println("Comprando con el cliente: " + cliente.getName());
-
-
-                        int n_acciones = (int) (Math.random() * 50);
-                        if(n_acciones == 0){
-                            n_acciones = 1;
-                        }
-                        System.out.println("Se va a realizar la compra de " + n_acciones + " acciones");
-
-                        corredor corredor = new corredor();
-
-                        thread1 thread1 = new thread1(corredor, cliente, empresa, n_acciones, option);
-
-                        cliente = clientes.get((int) (Math.random()* (clientes.size()-1)));
-                        System.out.println("Comprando con el cliente: " + cliente.getName());
-
-                        n_acciones = (int) (Math.random() * 50);
-                        if(n_acciones == 0){
-                            n_acciones = 1;
-                        }
-                        System.out.println("Se va a realizar la compra de " + n_acciones + " acciones");
-
-                        thread1 thread1_2 = new thread1(corredor, cliente, empresa, n_acciones,option);
-
-                        thread1.start();
-                        try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        thread1_2.start();
-                    }else{
-                        System.out.println("Ha ocurrido un error");
+                    //corredor 1, cliente 1 y numero de acciones
+                    corredor = new corredor("migue@example.com", "1234");
+                    clientes = querys.selectAllClient();
+                    cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
+                    n_acciones = (int) (Math.random() * 50);
+                    if (n_acciones == 0) {
+                        n_acciones = 1;
                     }
+
+                    //corredor 2, cliente 2 y numero de acciones
+                    corredor2 = new corredor("alvaro@example.com", "1234");
+                    cliente2 = clientes.get((int) (Math.random() * (clientes.size() - 1)));
+                    n_acciones2 = (int) (Math.random() * 50);
+                    if (n_acciones2 == 0) {
+                        n_acciones2 = 1;
+                    }
+
+                    //EMPRESA
+                    enterprise = enterprises.get((int) (Math.random() * enterprises.size()));
+                    System.out.println("Se van a comprar " + n_acciones + " acciones en la empresa " + enterprise.getName() + " con el cliente " + cliente.getName());
+                    System.out.println("Se van a comprar " + n_acciones2 + " acciones en la empresa " + enterprise.getName() + " con el cliente " + cliente2.getName());
+
+                    System.out.println("A la espera de que los corredores se logueen...");
+
+                    //Creacion de hilos
+                    thread1 = new thread1_2(corredor, cliente, enterprise, n_acciones, option);
+                    thread1_2 = new thread1_2(corredor2, cliente2, enterprise, n_acciones2, option);
+
+                    //Ejecucion hilos
+                    thread1.start();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    thread1_2.start();
                     break;
                 case 3:
+                    clientes = querys.selectAllClient();
+                    cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
+                    enterprises = querys.selectAllEnterprise();
+                    enterprise = enterprises.get((int) (Math.random() * (clientes.size() - 1)));
+                    cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
+                    List<corredor> corredores = querys.selectAllCorredores();
+                    thread3 thread3_1 = new thread3(corredores.get(0), 1);
+                    thread3 thread3_2 = new thread3(corredores.get(corredores.size() - 2), enterprise, 2);
+                    thread3 thread3_3 = new thread3(corredores.get(corredores.size() - 1), cliente, enterprise, 25, 3);
 
+                    thread3_1.start();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    thread3_2.start();
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    thread3_3.start();
                     break;
                 case 4:
                     break;
                 case 5:
+                    System.out.println("Mostrando Resumen...");
+                    System.out.println("---Empresas---");
+                    enterprises = querys.selectAllEnterprise();
+                    for (enterprise e : enterprises) {
+                        System.out.println(e);
+                    }
+                    System.out.println("---Acciones compradas de cada usuario---");
+                    List<client> clients = querys.selectAllActions();
+                    for (client c : clients) {
+                        System.out.println(c);
+                    }
                     break;
                 case 6:
                     System.out.println("Saliendo...");
@@ -156,7 +183,7 @@ public class menu {
                     break;
             }
 
-        }while (option!=6);
+        } while (option != 6);
     }
 
 }

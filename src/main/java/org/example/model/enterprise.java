@@ -2,10 +2,20 @@ package org.example.model;
 
 public class enterprise {
 
+    private int id;
     private String name;
     private int n_actions;
 
-    public enterprise(String name, int n_actions) {
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public enterprise(int id, String name, int n_actions) {
+        this.id = id;
         this.name = name;
         this.n_actions = n_actions;
     }

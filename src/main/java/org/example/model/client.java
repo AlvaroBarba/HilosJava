@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 public class client {
 
+    private  int id;
     private String name;
     private String dni;
     private String lastName;
@@ -11,7 +12,8 @@ public class client {
     private String phone;
     private Timestamp dateOfBirth;
 
-    public client(String name, String dni, String lastName, String email, String phone, Timestamp dateOfBirth) {
+    public client(int id,String name, String dni, String lastName, String email, String phone, Timestamp dateOfBirth) {
+        this.id = id;
         this.name = name;
         this.dni = dni;
         this.lastName = lastName;
@@ -66,6 +68,14 @@ public class client {
 
     public void setDateOfBirth(Timestamp dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

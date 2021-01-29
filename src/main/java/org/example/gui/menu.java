@@ -141,7 +141,6 @@ public class menu {
                     cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
                     enterprises = querys.selectAllEnterprise();
                     enterprise = enterprises.get((int) (Math.random() * (enterprises.size() - 1)));
-                    cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
                     List<corredor> corredores = querys.selectAllCorredores();
                     thread3 thread3_1 = new thread3(corredores.get(0), 1);
                     thread3 thread3_2 = new thread3(corredores.get(corredores.size() - 2), enterprise, 2);

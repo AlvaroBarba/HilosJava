@@ -15,7 +15,7 @@ public class querys {
     final static String SELECTALLCORREDORES = "SELECt * FROM corredor";
     final static String CREATEENTERPRISE = "INSERT INTO empresa (nombre, acciones_disponibles) VALUES (?,?)";
     final static String SELECTALLCLIENTS = "SELECT * FROM cliente";
-    final static String SELECTALLENTRERPRISE = "SELECt * FROM empresa";
+    final static String SELECTALLENTRERPRISE = "SELECT * FROM empresa";
     final static String INSERTCOMPRA = "INSERT INTO cliente_empresa (codigo_cliente, codigo_empresa, numero_acciones) VALUES (?,?,?)";
     final static String LOGIN = "SELECT * FROM corredor WHERE login=? AND password=?";
     final static String BORRAR = "DELETE FROM cliente_empresa";
@@ -28,7 +28,7 @@ public class querys {
     private int acciones_disponibles;
     private boolean flag = false;
 
-    public boolean compruebaAcciones(int id_empresa, int n_acciones) {
+    public synchronized boolean compruebaAcciones(int id_empresa, int n_acciones) {
         boolean result = false;
         acciones_disponibles = -1;
         try {
@@ -133,7 +133,7 @@ public class querys {
         return result;
     }
 
-    public boolean restaAcciones(int id_empresa, int n_acciones) {
+    public synchronized boolean restaAcciones(int id_empresa, int n_acciones) {
         flag = true;
         boolean result = false;
         try {
@@ -153,7 +153,7 @@ public class querys {
         return result;
     }
 
-    public boolean borraEmpresa(String name) {
+    public synchronized boolean borraEmpresa(String name) {
         boolean flag = false;
         try {
             java.sql.Connection conn = connectionUtils.getConnection();
@@ -173,7 +173,7 @@ public class querys {
 
     }
 
-    public enterprise getEnterprise(int id) {
+    public synchronized enterprise getEnterprise(int id) {
         enterprise enterprise = null;
         try {
             java.sql.Connection conn = connectionUtils.getConnection();
@@ -190,7 +190,7 @@ public class querys {
         return enterprise;
     }
 
-    public enterprise getEnterpriseByName(String name) {
+    public synchronized enterprise getEnterpriseByName(String name) {
         enterprise enterprise = null;
         try {
             java.sql.Connection conn = connectionUtils.getConnection();
@@ -208,7 +208,7 @@ public class querys {
     }
 
 
-    public corredor login(String login, String pass) {
+    public synchronized corredor login(String login, String pass) {
         corredor corredor = null;
         try {
             java.sql.Connection conn = connectionUtils.getConnection();
@@ -231,7 +231,7 @@ public class querys {
         return corredor;
     }
 
-    public List<client> selectAllClient() {
+    public synchronized List<client> selectAllClient() {
         List<client> aux = new ArrayList<>();
         client cli;
         try {
@@ -253,7 +253,7 @@ public class querys {
         return aux;
     }
 
-    public List<corredor> selectAllCorredores() {
+    public synchronized List<corredor> selectAllCorredores() {
         List<corredor> aux = new ArrayList<>();
         corredor corredor;
         try {
@@ -276,7 +276,7 @@ public class querys {
     }
 
 
-    public List<enterprise> selectAllEnterprise() {
+    public synchronized List<enterprise> selectAllEnterprise() {
         List<enterprise> aux = new ArrayList<>();
         enterprise enterprise;
         try {
@@ -298,7 +298,7 @@ public class querys {
         return aux;
     }
 
-    public void borrarCompras() {
+    public synchronized void borrarCompras() {
         try {
             java.sql.Connection conn = connectionUtils.getConnection();
             PreparedStatement ps = conn.prepareStatement(BORRAR);
@@ -310,7 +310,7 @@ public class querys {
     }
 
 
-    public boolean createEnterprise(enterprise e) {
+    public synchronized boolean createEnterprise(enterprise e) {
         boolean flag = false;
         try {
             java.sql.Connection conn = connectionUtils.getConnection();
@@ -329,7 +329,7 @@ public class querys {
         return flag;
     }
 
-    public List<client> selectAllActions() {
+    public synchronized List<client> selectAllActions() {
         List<client> aux = new ArrayList<>();
         client client;
         try {

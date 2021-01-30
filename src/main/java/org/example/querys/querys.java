@@ -113,7 +113,7 @@ public class querys {
                     } catch (SQLException ex) {
                     }
                 } else {
-                    System.out.println("La empresa no dispone de acciones en este instante, lo sentimos.");
+                    System.out.println("La empresa no dispone de acciones suficientes en este instante, lo sentimos.");
                     flag = false;
                     notifyAll();
                 }

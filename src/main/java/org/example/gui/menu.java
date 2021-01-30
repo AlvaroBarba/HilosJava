@@ -162,7 +162,6 @@ public class menu {
                     break;
                 case 4:
                     clientes = querys.selectAllClient();
-                    cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
                     enterprise = querys.getEnterpriseByName("Clave");
                     cliente = clientes.get((int) (Math.random() * (clientes.size() - 1)));
                     corredores = querys.selectAllCorredores();
